@@ -1,0 +1,99 @@
+From f70241b8ed39dd6e6fc77eb9a5e93438cbbcd857 Mon Sep 17 00:00:00 2001
+From: LineageOS-MTK <luzejij@binka.me>
+Date: Tue, 7 Feb 2017 14:07:39 +0300
+Subject: [PATCH 1/6] Improving fakeiccid for legacy rils & add the fixing of
+ ussd
+
+---
+ .../com/android/internal/telephony/SubscriptionInfoUpdater.java    | 2 +-
+ src/java/com/android/internal/telephony/gsm/GSMPhone.java          | 7 ++++++-
+ src/java/com/android/internal/telephony/uicc/IccConstants.java     | 3 +++
+ src/java/com/android/internal/telephony/uicc/RuimRecords.java      | 7 ++++---
+ src/java/com/android/internal/telephony/uicc/SIMRecords.java       | 7 ++++---
+ 5 files changed, 18 insertions(+), 8 deletions(-)
+
+diff --git a/src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java b/src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java
+index 24c0f2d3a..c8ac89b95 100644
+--- a/src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java
++++ b/src/java/com/android/internal/telephony/SubscriptionInfoUpdater.java
+@@ -309,7 +309,7 @@ public class SubscriptionInfoUpdater extends Handler {
+                         mIccId[slotId] = ICCID_STRING_FOR_NO_SIM;
+                     }
+                 } else {
+-                    mIccId[slotId] = ICCID_STRING_FOR_NO_SIM;
++                    mIccId[slotId] = IccConstants.FAKE_ICCID;
+                     logd("Query IccId fail: " + ar.exception);
+                 }
+                 logd("sIccId[" + slotId + "] = " + mIccId[slotId]);
+diff --git a/src/java/com/android/internal/telephony/gsm/GSMPhone.java b/src/java/com/android/internal/telephony/gsm/GSMPhone.java
+index e2624dad1..183e445ea 100644
+--- a/src/java/com/android/internal/telephony/gsm/GSMPhone.java
++++ b/src/java/com/android/internal/telephony/gsm/GSMPhone.java
+@@ -1514,7 +1514,12 @@ public class GSMPhone extends PhoneBase {
+             // Complete pending USSD
+ 
+             if (isUssdRelease) {
+-                found.onUssdRelease();
++                // MTK weirdness
++                if(ussdMessage != null) {
++                    found.onUssdFinished(ussdMessage, isUssdRequest);
++                } else {
++                    found.onUssdRelease();
++                }
+             } else if (isUssdError) {
+                 found.onUssdFinishedError();
+             } else {
+diff --git a/src/java/com/android/internal/telephony/uicc/IccConstants.java b/src/java/com/android/internal/telephony/uicc/IccConstants.java
+index d395fc186..cbe621f7a 100644
+--- a/src/java/com/android/internal/telephony/uicc/IccConstants.java
++++ b/src/java/com/android/internal/telephony/uicc/IccConstants.java
+@@ -107,4 +107,7 @@ public interface IccConstants {
+ 
+     //UICC access
+     static final String DF_ADF = "7FFF";
++	
++	//CM-Specific : Fake ICCID
++    static final String FAKE_ICCID = "00000000000001";
+ }
+diff --git a/src/java/com/android/internal/telephony/uicc/RuimRecords.java b/src/java/com/android/internal/telephony/uicc/RuimRecords.java
+index d348c8125..445e25a4a 100644
+--- a/src/java/com/android/internal/telephony/uicc/RuimRecords.java
++++ b/src/java/com/android/internal/telephony/uicc/RuimRecords.java
+@@ -690,10 +690,11 @@ public final class RuimRecords extends IccRecords {
+                 data = (byte[])ar.result;
+ 
+                 if (ar.exception != null) {
+-                    break;
++                    mIccId = FAKE_ICCID;
++                }
++                else {
++	                mIccId = IccUtils.bcdToString(data, 0, data.length);
+                 }
+-
+-                mIccId = IccUtils.bcdToString(data, 0, data.length);
+ 
+                 log("iccid: " + mIccId);
+ 
+diff --git a/src/java/com/android/internal/telephony/uicc/SIMRecords.java b/src/java/com/android/internal/telephony/uicc/SIMRecords.java
+index 8b6f74395..496158efd 100644
+--- a/src/java/com/android/internal/telephony/uicc/SIMRecords.java
++++ b/src/java/com/android/internal/telephony/uicc/SIMRecords.java
+@@ -874,11 +874,12 @@ public class SIMRecords extends IccRecords {
+                 data = (byte[])ar.result;
+ 
+                 if (ar.exception != null) {
+-                    break;
++                    mIccId = FAKE_ICCID;
++                }
++                else {
++                    mIccId = IccUtils.bcdToString(data, 0, data.length);
+                 }
+ 
+-                mIccId = IccUtils.bcdToString(data, 0, data.length);
+-
+                 log("iccid: " + mIccId);
+ 
+             break;
+-- 
+2.11.0.windows.3
+
