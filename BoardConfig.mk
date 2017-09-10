@@ -119,7 +119,6 @@ BOARD_CHARGING_MODE_BOOTING_LPM := /sys/class/BOOT/BOOT/boot/boot_mode
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_CHARGER_SHOW_PERCENTAGE := true
-BOARD_HAL_STATIC_LIBRARIES := libhealthd.mtk
 
 # EGL settings
 BOARD_EGL_CFG := $(LOCAL_PATH)/configs/egl.cfg
@@ -154,6 +153,3 @@ USE_MINIKIN := true
 
 # Selinux
 BOARD_SEPOLICY_DIRS += $(LOCAL_PATH)/sepolicy
-
-# Sepolicy hack for old kernel, mt6572 version is 26.
-POLICYVERS := 26

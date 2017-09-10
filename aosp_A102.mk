@@ -2,7 +2,7 @@
 PRODUCT_RELEASE_NAME := A102
 
 # Inherit some common CM stuff.
-$(call inherit-product, vendor/cm/config/common_full_phone.mk)
+$(call inherit-product, vendor/aosp/common.mk)
 
 # Inherit device configuration
 $(call inherit-product, device/Micromax/A102/device_A102.mk)
@@ -12,7 +12,7 @@ PRODUCT_LOCALES := en_US ru_RU en_AU en_IN fr_FR it_IT es_ES et_EE de_DE nl_NL c
 
 # Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := A102
-PRODUCT_NAME := lineage_A102
+PRODUCT_NAME := aosp_A102
 PRODUCT_BRAND := Micromax
 PRODUCT_MODEL := Micromax A102
 PRODUCT_MANUFACTURER := Micromax

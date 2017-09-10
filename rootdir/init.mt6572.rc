@@ -514,8 +514,8 @@ on post-fs-data
     chmod 0660 /dev/mtk_sched
     chown system media /dev/mtk_sched
 
-    chmod 666 /dev/mali
-    chown system graphics /dev/mali
+    chmod 666 /dev/mali0
+    chown system graphics /dev/mali0
 
 
 
