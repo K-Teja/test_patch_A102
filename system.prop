@@ -1,0 +1,5 @@
+#
+# system.prop for A102
+ro.product.name=A102
+ro.product.device=A102
+#
