@@ -1,9 +1,6 @@
 USE_CAMERA_STUB := true
 
-# inherit from the proprietary version
--include vendor/Micromax/A102/BoardConfigVendor.mk
-
-DEVICE_FOLDER := device/Micromax/102
+DEVICE_FOLDER := device/Micromax/A102
 
 # Platform
 TARGET_BOARD_PLATFORM := mt6572
@@ -36,7 +33,7 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_SUPPRESS_SECURE_ERASE := true
 BOARD_SUPPRESS_EMMC_WIPE := true 
-TARGET_PREBUILT_KERNEL := device/Micromax/102/kernel
+TARGET_PREBUILT_KERNEL := device/Micromax/A102/kernel
 
 BOARD_HAS_NO_SELECT_BUTTON := true
 
@@ -44,49 +41,28 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_FOLDER)/recovery.fstab
 
 BOARD_HAS_MTK := true
-# MTK Partitions Defines
-MTK_BOOT_DEVICE_NAME := /dev/bootimg
-MTK_BOOT_DEVICE_SIZE := 16777216
-MTK_RECOVERY_DEVICE_NAME := /dev/recovery
-MTK_RECOVERY_DEVICE_SIZE := 16777216
-MTK_UBOOT_DEVICE_NAME := /dev/uboot
-MTK_UBOOT_DEVICE_SIZE := 4194304
-MTK_NVRAM_DEVICE_NAME := /dev/nvram
-MTK_NVRAM_DEVICE_SIZE := 5242880
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_15x24.h\"
 DEVICE_RESOLUTION := 480x800
-#BOARD_UMS_LUNFILE := "/sys/devices/platform/mt_usb/musb-hdrc.0/gadget/lun0/file"
-#TARGET_RECOVERY_LCD_BACKLIGHT_PATH := /sys/devices/platform/leds-mt65xx/leds/lcd-backlight/brightness
 
 #TWRP
 TW_THEME := portrait_hdpi
 #TARGET_RECOVERY_INITRC := $(DEVICE_FOLDER)/recovery/recovery.twrp.rc
 #TARGET_RECOVERY_FSTAB := $(DEVICE_FOLDER)/recovery/recovery.twrp.fstab
-TW_SDEXT_NO_EXT4 := true
-TW_EXCLUDE_MTP := true
-TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
-TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/class/android_usb/android0/f_mass_storage/lun/file"
-TW_CUSTOM_CPU_TEMP_PATH := "/sys/class/power_supply/battery/batt_temp"
-RECOVERY_SDCARD_ON_DATA := true
-BOARD_HAS_LARGE_FILESYSTEM := true
-RECOVERY_GRAPHICS_USE_LINELENGTH := true
-TW_NO_REBOOT_BOOTLOADER := true
-#TW_USE_TOOLBOX := true
-#TW_HAS_DOWNLOAD_MODE := true
-TW_DEFAULT_EXTERNAL_STORAGE := true
-TW_INTERNAL_STORAGE_PATH := "/data/media"
-TW_INTERNAL_STORAGE_MOUNT_POINT := "data"
-TW_EXTERNAL_STORAGE_PATH := "/sdcard"
-TW_EXTERNAL_STORAGE_MOUNT_POINT := "sdcard"
+RECOVERY_VARIANT := twrp
+TW_NO_EXFAT := true
+TWHAVE_SELINUX := true
+TW_THEME := portrait_mdpi
+TW_NO_EXFAT_FUSE := true
 TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
-SP1_NAME := "uboot"
-SP1_BACKUP_METHOD := image
-SP1_MOUNTABLE := 0
-SP2_NAME := "nvram"
-SP2_DISPLAY_NAME := "nvram"
-SP2_BACKUP_METHOD := image
-SP2_MOUNTABLE := 0
-TW_INCLUDE_FB2PNG := true
+#TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/mt_usb/musb-hdrc.0/gadget/lun%d/file"
+TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/mt_usb/gadget/lun%d/file"
+TW_EXCLUDE_SUPERSU := true
+TARGET_RECOVERY_PIXEL_FORMAT := "BRGA_8888"
+DEVICE_RESOLUTION := 480x800
+TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
+TW_MAX_BRIGHTNESS := 255
+TW_CUSTOM_CPU_TEMP_PATH := /sys/devices/virtual/thermal/thermal_zone1/temp
+
 
 # EGL settings
 BOARD_EGL_CFG := $(DEVICE_FOLDER)/egl.cfg
